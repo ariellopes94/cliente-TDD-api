@@ -1,0 +1,286 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: 'Cliente API'
+  description: ' |
+  Esta api tem por objetivo cadastrar, consultar, alterar e excluir clientes.
+   [Saiba mais](http://virtserver.swaggerhub.com/carledwinti/Cliente_API/1.0.0/readme)
+  
+  '
+consumes:
+  - application/json
+  
+produces:
+  - application/json
+  
+tags:
+  - name: 'Consulta'
+  - name: 'Cadastro'
+  - name: 'Manutencao'
+  - name: 'Exclusao'
+  - name: 'API'
+
+#  localhost:8080/cliente-api/v1
+#  virtserver.swaggerhub.com/carledwinti/Cliente_API/1.0.0
+host: virtserver.swaggerhub.com
+basePath: /carledwinti/Cliente_API/1.0.0
+schemes:
+  - http
+  - https
+
+paths:
+  #  virtserver.swaggerhub.com/carledwinti/Cliente_API/1.0.0/clientes
+  /clientes:
+    get:
+      tags:
+        - Consulta
+      summary: "Consulta todos os clientes."
+      operationId: "consultaTodos"
+      description: "Esta operação tem por objetivo consulta todos os clientes"
+      responses:
+        200:
+          description: "Sucesso ao consultar todos os clientes."
+          schema:
+            $ref: "#/definitions/Clientes"
+        400:
+          description: "Consulta inválida."
+        401:
+          description: "Consulta não autorizada."
+        404:
+          description: "Nenhum cliente encontrado para a consulta."
+        500:
+          description: "Erro interno ao tentar  realizar a consulta."
+ 
+  #  virtserver.swaggerhub.com/carledwinti/Cliente_API/1.0.0/cliente
+  /cliente:
+    post:
+      tags: 
+        - Cadastro
+      summary: "Cadatro de um novo cliente."
+      operationId: "cadastraNovo"
+      description: "Esta operação tem por objetivo cadatrar um novo cliente."
+      parameters: 
+        - in: "body"
+          name: "cliente"
+          required: true
+          schema:
+            $ref: "#/definitions/Cliente"
+      responses:
+        201:
+          description: "Sucesso ao cadatrar o novo cliente."
+          schema:
+            $ref: "#/definitions/Cliente"
+          headers:
+            Location:
+              type: "string"
+              description: "URI do cliente alterado."  
+        400:
+          description: "Cadastro inválido."
+        401:
+          description: "Cadastro não autorizado."
+        500:
+          description: "Erro interno ao tentar realizar o cadatro."
+  
+  #  virtserver.swaggerhub.com/carledwinti/Cliente_API/1.0.0/cliente/875  
+  /cliente/{id}:
+    put:
+      tags: 
+        - Manutencao
+      summary: "Altera um cliente existente"
+      operationId: "alteraExistente"
+      description: "Esta operação tem por objetivo alterar um cliente existente."
+      parameters: 
+        - in: "path"
+          name: "id"
+          type: "integer"
+          format: "int32"
+          required: true
+          description: "Id do cliente."
+        - in: "body"
+          name: "cliente"
+          required: true
+          schema:
+            $ref: "#/definitions/Cliente"
+      responses:
+        202:
+          description: "Sucesso ao alterar um cliente existente."
+          schema:
+            $ref: "#/definitions/Cliente"
+          headers:
+            Location:
+              type: "string"
+              description: "URI do cliente alterado."
+        400:
+          description: "Alteração inválida."
+        401:
+          description: "Alteração não autorizada."
+        500:
+          description: "Erro interno ao tentar realizar a alteração."
+  
+    get:
+      tags:
+        - Consulta
+      summary: "Consulta um cliente existe por id."
+      operationId: "consultaPorId"
+      description: "Esta consulta tem por objetivo consultar um cliente existente por id."
+      parameters: 
+        - in: "path"
+          name: "id"
+          type: "integer"
+          format: "int32"
+          required: true
+          description: "Numero do id do cliente"
+      responses:
+        200:
+          description: "Sucesso ao consultar um cliente existente por id."
+          schema:
+            $ref: "#/definitions/Cliente"
+        400:
+          description: "Consulta inválida."
+        401:
+          description: "Consulta não autorizada."
+        404:
+          description: "Nenhum cliente encontrado para a consulta por id."
+        500:
+          description: "Erro interno ao tentar realizar a consulta por id."
+  
+    delete:
+      tags:
+        - Exclusao
+      summary: "Exclui um cliente existente."
+      operationId: "excluiExistente"
+      description: "Esta operação tem por objetivo excluir um cliente existente."
+      parameters: 
+        - in: "path"
+          name: "id"
+          type: "integer"
+          required: true
+          format: "int32"
+          description: "Numero do id do cliente."
+      responses:
+        204:
+          description: "Sucesso ao excluir um cliente existente."
+        400:
+          description: "Exclusão inválida."
+        401:
+          description: "Exclusão não autorizada."
+        500:
+          description: "Erro interno ao tentar realizar a exclusão."
+  
+  /cliente/consulta/{sobrenome}:
+    get:
+      tags: 
+        - Consulta
+      summary: "Consulta cliente existente por sobrenome."
+      operationId: "consultaPorSobrenome"
+      description: "Esta operação tem por objetivo consultar um cliente existente por sobrenome."
+      parameters: 
+        - in: "path"
+          name: "sobrenome"
+          type: "string"
+          required: true
+          description: "Sobrenome do cliente."
+      responses:
+        200:
+          description: "Sucesso ao consultar cliente por sobrenome."
+          schema:
+            $ref: "#/definitions/Clientes"
+        400: 
+          description: "Consulta inválida."
+        401:
+          description: "Consulta não autorizada."
+        404:
+          description: "Nenhum cliente encontrado para pesquisa."
+        500:
+          description: "Erro interno ao tentar realizar a consulta por sobrenome."
+  
+  /cliente/{status}/{id}:
+    put:
+      tags:
+        - Manutencao
+      summary: "Alteração de status de cliente por id."
+      operationId: "alteraStatusPorId"
+      description: "Esta operação tem por objetivo altarar o status do cliente por id."
+      parameters: 
+        - in: "path"
+          name: "status"
+          required: true
+          type: "string"
+          enum: ["ativo", "inativo"]
+          description: "Status do cliente."
+        - in: "path"
+          name: "id"
+          type: "integer"
+          format: "int32"
+          required: true
+          description: "Numero do id do cliente."
+      responses:
+        202:
+          description: "Sucesso ao alterar o status de um cliente existente."
+          schema:
+            $ref: "#/definitions/Cliente"
+          headers:
+            Location:
+              type: "string"
+              description: "URI do cliente alterado."
+        400:
+          description: "Alteração de status inválida."
+        401:
+          description: "Alteração de status não autorizada."
+        500:
+          description: "Erro interno ao tentar realizar a alteração de status."
+            
+  /readme:
+    get:
+      tags:
+        - API
+      summary: "Recupera readme da API."
+      operationId: "readme"
+      description: "Esta operação retorna o read da API."
+      responses:
+        200:
+          description: "Sucesso ao recuperar o readme da API."
+          schema:
+            type: "string"
+        500:
+          description: "Erro interno ao tentar recuperar o readme da API."
+  
+definitions:
+
+  Clientes:
+    type: array
+    items:
+      $ref: '#/definitions/Cliente'
+  
+  Cliente:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int32"
+        description: "Identificador do cliente."
+      nome:
+        type: "string"
+        description: "Nome do cliente."
+      sobrenome:
+        type: "string"
+        description: "Sobrenome do cliente."
+      iniciais:
+        type: "string"
+        minLength: 2
+        maxLength: 7
+        description: "Iniciais do nome completo do cliente."
+      dataNascimento:
+        type: "string"
+        format: "date"
+        description: "Data de nascimento do cliente."
+      dataAtualizacao:
+        type: "string"
+        format: "date-time"
+        description: "Data de atualização dos dados do cliente."
+      status:
+        type: boolean
+        description: "Status ativo ou inativo do cliente."
+      tipo:
+        type: "string"
+        enum: ["interno", "externo"]
